@@ -458,7 +458,10 @@ RiakClient.prototype.modify = function (bucket, key, mutator, options, callback)
                 new_headers["X-Riak-Vclock"] = res1.headers["x-riak-vclock"];
             }
 
-            options.http_headers = new_headers;
+            //merge and replace header options with new_headers
+            for (var headername in new_headers) {
+                options.http_headers[headername] = new_headers[headername];
+            }
 
             self.put(bucket, key, new_obj, options, function (err, res, obj) {
                 if (err) {
